@@ -1,0 +1,302 @@
+[
+  {
+    "id": "EVAL-001",
+    "domain": "Architecture",
+    "prompt": "Choose a database for a high-write, event-driven analytics pipeline handling 50K events/sec. Recommend schema and partitioning strategy.",
+    "difficulty": "high",
+    "expected_diversity": true,
+    "diversity_type": ["methodology", "performance-vs-consistency", "storage-model"],
+    "expected_difference_markers": [
+      "Model A favors append-only log with columnar OLAP + batch compaction",
+      "Model B favors NoSQL time-series DB with TTL and sharding",
+      "Trade-off: analytical latency vs. ingestion simplicity; consistency vs. availability"
+    ],
+    "expected_helpfulness": "yes",
+    "expected_synthesis_guidelines": [
+      "Common ground: event time partitioning, hot/warm/cold tiers",
+      "Disagreement: OLAP warehouse vs time-series primary store",
+      "Recommendation: dual-path (TSDB for realtime, warehouse for analytics) with CDC bridge; caveats on cost and ops"
+    ],
+    "acceptance_criteria": [
+      "Names concrete partitioning (by time + org/tenant)",
+      "Calls out write amplification/compaction and shard hot-spot risks",
+      "Provides when-to-choose-each decision rule"
+    ],
+    "risk_flags": ["over-prescription without workload specifics", "vendor bias"]
+  },
+  {
+    "id": "EVAL-002",
+    "domain": "Product Strategy",
+    "prompt": "Should we launch a freemium tier for our developer tool? Outline expected impacts on activation, revenue, and support load.",
+    "difficulty": "medium",
+    "expected_diversity": true,
+    "diversity_type": ["value-framework", "go-to-market", "risk-tolerance"],
+    "expected_difference_markers": [
+      "Growth-first stance prioritizing top-of-funnel and virality",
+      "Monetization-first stance prioritizing ARPU and support containment"
+    ],
+    "expected_helpfulness": "yes",
+    "expected_synthesis_guidelines": [
+      "Common ground: need guardrails and usage limits",
+      "Disagreement: scale vs. cost containment",
+      "Recommendation: staged freemium with strict usage caps and upgrade nudges; review at 8 weeks"
+    ],
+    "acceptance_criteria": [
+      "Quantifies support impact (tickets/user) and infra cost/user",
+      "Defines leading indicators (activation, WAU, conversion)"
+    ],
+    "risk_flags": ["hand-wavy projections"]
+  },
+  {
+    "id": "EVAL-003",
+    "domain": "Privacy & Compliance",
+    "prompt": "Design a privacy policy approach for a consumer health app collecting wearable data. Address consent, retention, and data sharing.",
+    "difficulty": "high",
+    "expected_diversity": true,
+    "diversity_type": ["regulatory-interpretation", "risk-tolerance", "scope"],
+    "expected_difference_markers": [
+      "Strict-privacy approach: opt-in granular consent, minimal retention",
+      "Pragmatic approach: broader consent with clear disclosures and opt-outs"
+    ],
+    "expected_helpfulness": "yes",
+    "expected_synthesis_guidelines": [
+      "Common ground: transparency, breach procedures",
+      "Disagreement: consent granularity and retention windows",
+      "Recommendation: layered consent + tiered retention (30/180/365) with DSAR process; legal review caveat"
+    ],
+    "acceptance_criteria": [
+      "Mentions HIPAA-adjacent constraints (even if not covered)",
+      "Includes DSAR/portability and clear revocation flows"
+    ],
+    "risk_flags": ["legal jurisdiction ambiguity"]
+  },
+  {
+    "id": "EVAL-004",
+    "domain": "Platform Engineering",
+    "prompt": "Evaluate whether to adopt feature flags or trunk-based branching to speed up delivery while maintaining quality.",
+    "difficulty": "medium",
+    "expected_diversity": true,
+    "diversity_type": ["methodology", "risk-tolerance", "operational-complexity"],
+    "expected_difference_markers": [
+      "Feature flags: continuous delivery, runtime control; risks: flag debt",
+      "Trunk-based: fewer long-lived branches, discipline; risks: blast radius"
+    ],
+    "expected_helpfulness": "yes",
+    "expected_synthesis_guidelines": [
+      "Common ground: CI rigor, test coverage",
+      "Disagreement: operational overhead vs. merging discipline",
+      "Recommendation: trunk-based + limited flags (ops-only) with sunset policy"
+    ],
+    "acceptance_criteria": ["Calls out flag cleanup SLAs", "Specifies CI gates and rollback strategy"],
+    "risk_flags": ["culture change under-estimated"]
+  },
+  {
+    "id": "EVAL-005",
+    "domain": "Security",
+    "prompt": "Create an incident response playbook for PII exposure detected in logs. Prioritize steps in the first 24 hours.",
+    "difficulty": "medium",
+    "expected_diversity": false,
+    "diversity_type": ["process-emphasis"],
+    "expected_difference_markers": [
+      "Both approaches should converge on containment → assessment → notification",
+      "Minor variation on sequencing or roles is acceptable"
+    ],
+    "expected_helpfulness": "yes",
+    "expected_synthesis_guidelines": [
+      "Common ground: containment, audit, legal comms",
+      "Recommendation: crisp timeline with RACI; note jurisdictional notification windows"
+    ],
+    "acceptance_criteria": [
+      "Mentions rotating on-call, comms templates, evidence preservation",
+      "Identifies regulators/partners timeline triggers"
+    ],
+    "risk_flags": ["omits legal counsel step"]
+  },
+  {
+    "id": "EVAL-006",
+    "domain": "API Design",
+    "prompt": "Decide between GraphQL and REST for a public API targeting third-party integrations. Consider caching, versioning, and rate limits.",
+    "difficulty": "medium",
+    "expected_diversity": true,
+    "diversity_type": ["architecture", "operability", "consumer-experience"],
+    "expected_difference_markers": [
+      "GraphQL flexibility vs REST simplicity & cacheability",
+      "Versioning strategies differ significantly"
+    ],
+    "expected_helpfulness": "yes",
+    "expected_synthesis_guidelines": [
+      "Common ground: schema governance and limits",
+      "Recommendation: REST for public, GraphQL for partner/first-party; shared auth/rate limiting"
+    ],
+    "acceptance_criteria": ["Explains cache keys and CDN fit", "Addresses deprecation/versioning explicitly"],
+    "risk_flags": ["overpromising hybrid without resourcing"]
+  },
+  {
+    "id": "EVAL-007",
+    "domain": "ML Evaluation",
+    "prompt": "Outline an LLM evaluation plan for summarization quality in a customer support context. Include metrics and sampling.",
+    "difficulty": "high",
+    "expected_diversity": true,
+    "diversity_type": ["methodology", "metric-selection"],
+    "expected_difference_markers": [
+      "Human rubric + task-success vs. automated metrics (ROUGE/BERTScore/QAFactEval)",
+      "Sampling design differences"
+    ],
+    "expected_helpfulness": "yes",
+    "expected_synthesis_guidelines": [
+      "Common ground: human-in-the-loop, bias checks",
+      "Recommendation: hybrid eval (human+automated), stratified sampling; calibrate thresholds"
+    ],
+    "acceptance_criteria": ["Defines inter-rater reliability", "Includes error taxonomy and red-team cases"],
+    "risk_flags": ["metric overfitting"]
+  },
+  {
+    "id": "EVAL-008",
+    "domain": "Go-To-Market",
+    "prompt": "Draft a go-to-market plan for an AI note-taking app in the SMB segment. Prioritize channels and pricing experiments.",
+    "difficulty": "medium",
+    "expected_diversity": true,
+    "diversity_type": ["channel-strategy", "pricing-theory"],
+    "expected_difference_markers": ["PLG/self-serve vs. reseller/partner-led", "Flat vs. per-seat vs. usage pricing"],
+    "expected_helpfulness": "yes",
+    "expected_synthesis_guidelines": [
+      "Common ground: onboarding friction reduction",
+      "Recommendation: PLG first + targeted partner tests; 3-tier pricing with usage add-ons"
+    ],
+    "acceptance_criteria": ["Lists leading indicators per channel", "Defines price test matrix"],
+    "risk_flags": ["channel dilution"]
+  },
+  {
+    "id": "EVAL-009",
+    "domain": "Testing Strategy",
+    "prompt": "Propose a test strategy for a React + Next.js app with server actions and RSC. Balance unit, integration, and e2e.",
+    "difficulty": "medium",
+    "expected_diversity": true,
+    "diversity_type": ["methodology", "risk-coverage"],
+    "expected_difference_markers": [
+      "Heavier unit + contract tests vs. heavier e2e with Playwright",
+      "Trade-offs in speed vs. confidence"
+    ],
+    "expected_helpfulness": "yes",
+    "expected_synthesis_guidelines": [
+      "Common ground: CI gating, flake control",
+      "Recommendation: 70/20/10 split (unit/integration/e2e) with contract tests for server actions"
+    ],
+    "acceptance_criteria": ["Notes mocking boundaries and fixtures", "Addresses RSC testing constraints"],
+    "risk_flags": ["slow suite ignored by team"]
+  },
+  {
+    "id": "EVAL-010",
+    "domain": "Mobile/Web",
+    "prompt": "Evaluate whether to build a native mobile app or PWA for a content platform. Consider offline, perf, and distribution.",
+    "difficulty": "medium",
+    "expected_diversity": true,
+    "diversity_type": ["platform-tradeoffs", "distribution"],
+    "expected_difference_markers": [
+      "Native: deeper OS features, store presence; PWA: faster iteration, lower cost",
+      "Offline and push differences"
+    ],
+    "expected_helpfulness": "yes",
+    "expected_synthesis_guidelines": [
+      "Common ground: perf and UX matter",
+      "Recommendation: PWA MVP + native wrapper later; measure retention uplift before native investment"
+    ],
+    "acceptance_criteria": ["Mentions installability and cache strategies", "Cites store review overhead"],
+    "risk_flags": ["overstated PWA OS access"]
+  },
+  {
+    "id": "EVAL-011",
+    "domain": "Data Platform",
+    "prompt": "Recommend an ETL vs. ELT approach for analytics on top of Postgres + a warehouse. Include tooling choices.",
+    "difficulty": "medium",
+    "expected_diversity": true,
+    "diversity_type": ["methodology", "operability", "cost"],
+    "expected_difference_markers": [
+      "ETL: curated transforms pre-warehouse; ELT: raw load with SQL transforms",
+      "Trade-off: governance vs. agility"
+    ],
+    "expected_helpfulness": "yes",
+    "expected_synthesis_guidelines": [
+      "Common ground: data contracts and lineage",
+      "Recommendation: ELT default + governed marts; CDC for operational PG load"
+    ],
+    "acceptance_criteria": ["References orchestration and lineage tools", "Notes warehouse compute cost controls"],
+    "risk_flags": ["schema sprawl"]
+  },
+  {
+    "id": "EVAL-012",
+    "domain": "Moderation Policy",
+    "prompt": "Propose a content moderation policy for a social app balancing free expression and safety.",
+    "difficulty": "high",
+    "expected_diversity": true,
+    "diversity_type": ["value-framework", "enforcement-style"],
+    "expected_difference_markers": ["Libertarian bias (light-touch)", "Safety-first (strict enforcement)"],
+    "expected_helpfulness": "yes",
+    "expected_synthesis_guidelines": [
+      "Common ground: illegal content removal",
+      "Recommendation: tiered enforcement + transparent appeals; clear thresholds; periodic audits"
+    ],
+    "acceptance_criteria": ["Defines prohibited content categories", "Describes escalation and appeals"],
+    "risk_flags": ["cultural bias"]
+  },
+  {
+    "id": "EVAL-013",
+    "domain": "Internationalization",
+    "prompt": "Recommend a strategy to internationalize a web app (i18n) with RTL support and dynamic locale data.",
+    "difficulty": "medium",
+    "expected_diversity": false,
+    "diversity_type": ["implementation-detail"],
+    "expected_difference_markers": [
+      "Most good answers converge: library choice + ICU formats + layout considerations",
+      "Small differences in rollout plan"
+    ],
+    "expected_helpfulness": "yes",
+    "expected_synthesis_guidelines": [
+      "Summarize common steps; call out RTL testing and dynamic loading",
+      "Recommendation: phased locale rollout; perf budgets for polyfills"
+    ],
+    "acceptance_criteria": [
+      "Mentions bidi/RTL testing and pluralization",
+      "Explains dynamic imports and fallback locales"
+    ],
+    "risk_flags": ["ignores accessibility"]
+  },
+  {
+    "id": "EVAL-014",
+    "domain": "Experimentation",
+    "prompt": "Outline an experimentation framework (A/B, bandits) for onboarding flows with low traffic.",
+    "difficulty": "medium",
+    "expected_diversity": true,
+    "diversity_type": ["statistical-approach", "risk-tolerance"],
+    "expected_difference_markers": [
+      "Classical A/B with longer runs vs. Bayesian/bandits with priors",
+      "Stopping rules and MDE assumptions vary"
+    ],
+    "expected_helpfulness": "yes",
+    "expected_synthesis_guidelines": [
+      "Common ground: event hygiene, guardrails",
+      "Recommendation: Bayesian approach with informative priors; gated rollouts for wins"
+    ],
+    "acceptance_criteria": ["Defines MDE and traffic allocation", "Discusses peeking and multiplicity"],
+    "risk_flags": ["underpowered tests"]
+  },
+  {
+    "id": "EVAL-015",
+    "domain": "Vector Search",
+    "prompt": "Choose a vector DB for semantic search on 5M docs. Discuss ingestion, indexing, and recall/latency trade-offs.",
+    "difficulty": "high",
+    "expected_diversity": true,
+    "diversity_type": ["architecture", "performance-vs-cost", "ops-complexity"],
+    "expected_difference_markers": [
+      "Managed service vs. self-hosted + ANN library",
+      "Recall vs. latency tuning strategies (HNSW params, PQ)"
+    ],
+    "expected_helpfulness": "yes",
+    "expected_synthesis_guidelines": [
+      "Common ground: batching, backfill, monitoring",
+      "Recommendation: managed DB for MVP + re-ranker; self-host later if costs dictate"
+    ],
+    "acceptance_criteria": ["Mentions index params and re-ranking", "Explains backfill/TTL and drift monitoring"],
+    "risk_flags": ["benchmark cherry-picking"]
+  }
+]
